@@ -1,0 +1,28 @@
+# dnsmasq configuration for pxelinux
+# To use this, be sure that /etc/dnsmasq.d/ipxe.conf is renamed
+# to something like ipxe.conf.unused.
+
+# Borrowed from:
+# http://danielboca.blogspot.com/2012/02/boot-linux-from-network-using-pxe-and.html
+# http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq.conf.example
+
+# Set the boot filename for netboot/PXE. You will only need
+# this is you want to boot machines over the network and you will need
+# a TFTP server; either dnsmasq's built in TFTP server or an
+# external one. (See below for how to enable the TFTP server.)
+dhcp-boot=pxelinux.0
+# Send vendor-class specific options encapsulated in DHCP option 43.
+# The meaning of the options is defined by the vendor-class so
+# options are sent only when the client supplied vendor class
+# matches the class given here.
+dhcp-option=vendor:PXEClient,6,2b
+dhcp-no-override
+# Do real PXE, rather than just booting a single file, this is an
+# alternative to dhcp-boot.
+#pxe-prompt="What system shall I netboot?"
+# or with timeout before first available action is taken:
+pxe-prompt="Press F8 for boot menu", 3
+# Available boot services. for PXE.
+pxe-service=X86PC, "Boot from local hard disk", 0
+# Loads <tftp-root>/pxelinux.0 from dnsmasq TFTP server.
+pxe-service=x86PC, "Install Linux", pxelinux
